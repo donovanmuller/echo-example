@@ -1,5 +1,6 @@
 package io.switchbit;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +23,19 @@ public class EchoController {
 	}
 
 	@PostMapping
+	@HystrixCommand(fallbackMethod = "noOneHome")
 	String echo(@RequestBody String message) {
 		log.info("Sending echo message: {}", message);
 
 		ResponseEntity<String> response = restTemplate
-				.postForEntity("http://chamber:8080/chamber", message, String.class);
+				.postForEntity("http://chamber/chamber", message, String.class);
 
 		return response.getBody();
 	}
 
+	String noOneHome(String message) {
+		log.warn("Hmm, looks like no one's home for echoing message [{}] :(", message);
+
+		return message;
+	}
 }
