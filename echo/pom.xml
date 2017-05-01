@@ -24,16 +24,16 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-ribbon</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>spring-cloud-starter-kubernetes-netflix</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-hystrix</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
     </dependencies>
 
@@ -51,6 +51,15 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <resources>
+                        <env>
+                            <!-- Must explicitly enable Hystrix support for Feign -->
+                            <!-- see http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html#spring-cloud-feign-hystrix -->
+                            <FEIGN_HYSTRIX_ENABLED>true</FEIGN_HYSTRIX_ENABLED>
+                        </env>
+                    </resources>
+                </configuration>
             </plugin>
         </plugins>
     </build>
